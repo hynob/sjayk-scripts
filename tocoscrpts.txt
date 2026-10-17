@@ -1,4 +1,4 @@
--- LEAKED BY JOINTHUB & LEAKHUB
+-- Programming BY sjayk
 
 local Library, Window, Options, Toggles = (function()
 local PreviewLibary = loadstring(game:HttpGet("https://raw.githubusercontent.com/SvenaEE/PreviewLibary/refs/heads/main/PreviewLibary"))()
@@ -9,14 +9,14 @@ local LocalPlayer = Players.LocalPlayer
 local PlayerGui = LocalPlayer and (LocalPlayer:FindFirstChildOfClass("PlayerGui") or LocalPlayer:WaitForChild("PlayerGui"))
 
 if PlayerGui then
-    local old = PlayerGui:FindFirstChild("TacoScriptsPreview")
+    local old = PlayerGui:FindFirstChild("s.jaykScriptsPreview")
     if old then old:Destroy() end
 end
 
 local PreviewWindow = PreviewLibary:CreateWindow({
-    Name = "TacoScriptsPreview",
-    LoadingTitle = "Taco Scripts",
-    LoadingSubtitle = "Welcome to Taco Scripts • Have fun",
+    Name = "s.jaykScriptsPreview",
+    LoadingTitle = "s.jayk Scripts",
+    LoadingSubtitle = "Welcome to s.jayk Scripts • Have fun",
 })
 
 local Options = getgenv().Options or {}
@@ -25,37 +25,37 @@ getgenv().Options = Options
 getgenv().Toggles = Toggles
 
 local function getGui()
-    return PlayerGui and PlayerGui:FindFirstChild("TacoScriptsPreview")
+    return PlayerGui and PlayerGui:FindFirstChild("s.jaykScriptsPreview")
 end
 
-local TacoGreen = Color3.fromRGB(55, 235, 120)
-local TacoDarkGreen = Color3.fromRGB(12, 49, 27)
-local function tacoColorize(object)
+local s.jaykGreen = Color3.fromRGB(55, 235, 120)
+local s.jaykDarkGreen = Color3.fromRGB(12, 49, 27)
+local function s.jaykColorize(object)
     if object:IsA("GuiObject") then
         local color = object.BackgroundColor3
         if color.R > 0.62 and color.G > 0.25 and color.G < 0.95 and color.B < 0.35 then
-            object.BackgroundColor3 = TacoDarkGreen
+            object.BackgroundColor3 = s.jaykDarkGreen
         end
     end
     if object:IsA("TextLabel") or object:IsA("TextButton") or object:IsA("TextBox") then
         local color = object.TextColor3
         if color.R > 0.62 and color.G > 0.25 and color.G < 0.95 and color.B < 0.35 then
-            object.TextColor3 = TacoGreen
+            object.TextColor3 = s.jaykGreen
         end
     elseif object:IsA("UIStroke") then
         local color = object.Color
         if color.R > 0.62 and color.G > 0.25 and color.G < 0.95 and color.B < 0.35 then
-            object.Color = TacoGreen
+            object.Color = s.jaykGreen
         end
     elseif object:IsA("ImageLabel") or object:IsA("ImageButton") then
         local color = object.ImageColor3
         if color.R > 0.62 and color.G > 0.25 and color.G < 0.95 and color.B < 0.35 then
-            object.ImageColor3 = TacoGreen
+            object.ImageColor3 = s.jaykGreen
         end
     end
 end
 
-local function applyTacoPreviewStyle()
+local function applys.jaykPreviewStyle()
     task.spawn(function()
         local gui
         for _ = 1, 25 do
@@ -64,14 +64,14 @@ local function applyTacoPreviewStyle()
             task.wait(0.1)
         end
         if not gui then return end
-        for _, object in ipairs(gui:GetDescendants()) do tacoColorize(object) end
+        for _, object in ipairs(gui:GetDescendants()) do s.jaykColorize(object) end
         gui.DescendantAdded:Connect(function(object)
-            task.defer(function() if object and object.Parent then tacoColorize(object) end end)
+            task.defer(function() if object and object.Parent then s.jaykColorize(object) end end)
         end)
-        local old = gui:FindFirstChild("TacoPreviewSkin")
+        local old = gui:FindFirstChild("s.jaykPreviewSkin")
         if old then old:Destroy() end
         local skin = Instance.new("Frame")
-        skin.Name = "TacoPreviewSkin"
+        skin.Name = "s.jaykPreviewSkin"
         skin.BackgroundTransparency = 1
         skin.Active = false
         skin.Selectable = false
@@ -80,20 +80,20 @@ local function applyTacoPreviewStyle()
         skin.Parent = gui
         local top = Instance.new("Frame")
         top.Size = UDim2.new(1, 0, 0, 4)
-        top.BackgroundColor3 = TacoGreen
+        top.BackgroundColor3 = s.jaykGreen
         top.BorderSizePixel = 0
         top.ZIndex = 100
         top.Parent = skin
         local gradient = Instance.new("UIGradient")
-        gradient.Color = ColorSequence.new(Color3.fromRGB(20, 120, 62), TacoGreen)
+        gradient.Color = ColorSequence.new(Color3.fromRGB(20, 120, 62), s.jaykGreen)
         gradient.Parent = top
         local badge = Instance.new("TextLabel")
         badge.Position = UDim2.fromOffset(14, 11)
         badge.Size = UDim2.fromOffset(146, 27)
-        badge.BackgroundColor3 = TacoDarkGreen
+        badge.BackgroundColor3 = s.jaykDarkGreen
         badge.BorderSizePixel = 0
-        badge.Text = "TACO SCRIPTS"
-        badge.TextColor3 = TacoGreen
+        badge.Text = "s.jayk SCRIPTS"
+        badge.TextColor3 = s.jaykGreen
         badge.Font = Enum.Font.GothamBold
         badge.TextSize = 11
         badge.ZIndex = 101
@@ -102,12 +102,12 @@ local function applyTacoPreviewStyle()
         corner.CornerRadius = UDim.new(0, 8)
         corner.Parent = badge
         local stroke = Instance.new("UIStroke")
-        stroke.Color = TacoGreen
+        stroke.Color = s.jaykGreen
         stroke.Transparency = 0.35
         stroke.Parent = badge
     end)
 end
-applyTacoPreviewStyle()
+applys.jaykPreviewStyle()
 
 local holderState = { _visible = true }
 setmetatable(holderState, {
@@ -149,15 +149,15 @@ local Library = {
 local function notify(first, second, third)
     local title, text, duration
     if type(first) == "table" then
-        title = tostring(first.Title or first.title or "Taco Scripts")
+        title = tostring(first.Title or first.title or "s.jayk Scripts")
         text = tostring(first.Content or first.content or first.Description or first.description or "")
         duration = first.Duration or first.duration or second or 3
     elseif type(second) == "string" then
-        title = tostring(first or "Taco Scripts")
+        title = tostring(first or "s.jayk Scripts")
         text = second
         duration = third or 3
     else
-        title = "Taco Scripts"
+        title = "s.jayk Scripts"
         text = tostring(first or "Notification")
         duration = second or 3
     end
@@ -189,7 +189,7 @@ function Library:Unload()
     for _, callback in ipairs(self._unloadCallbacks) do pcall(callback) end
     local gui = getGui()
     if gui then gui:Destroy() end
-    if getgenv().__TacoPreviewPort == self then getgenv().__TacoPreviewPort = nil end
+    if getgenv().__s.jaykPreviewPort == self then getgenv().__s.jaykPreviewPort = nil end
 end
 
 function Library:SetDPIScale() end
@@ -201,7 +201,7 @@ local function safe(callback, ...)
 end
 
 local function makeControl(flag, default, callback, toggle)
-    flag = tostring(flag or ("TacoPreview_" .. tostring(math.random(100000, 999999))))
+    flag = tostring(flag or ("s.jaykPreview_" .. tostring(math.random(100000, 999999))))
     local control = Options[flag] or {}
     control.Flag = flag
     control.Value = default
@@ -483,7 +483,7 @@ function Library.Toggle()
     Window:SetOpen(not Window._isOpen)
 end
 
-getgenv().__TacoPreviewPort = Library
+getgenv().__s.jaykPreviewPort = Library
 getgenv().MiamiSuppressNotifications = true
 
 return Library, Window, Options, Toggles
@@ -492,7 +492,7 @@ local Tabs
 
 SenseESPInterface = loadstring(game:HttpGet("https://raw.githubusercontent.com/boshyxd/rayfield/refs/heads/main/SenseSource.luau"))()
 if SenseESPInterface then
-    Library:Notify("[Taco Scripts] ESP Menu\nLoading ESP...\nESP Menu library loaded successfully!\nESP Menu Initialized!", 2)
+    Library:Notify("[s.jayk Scripts] ESP Menu\nLoading ESP...\nESP Menu library loaded successfully!\nESP Menu Initialized!", 2)
     SenseESPInterface.Load()
 else
     Library:Notify("Error\nFailed to load ESP Menu.", 3)
@@ -510,12 +510,12 @@ Tabs = {
     Settings = Window:AddTab('Settings'),
 }
 
-MiamiBrandGroup = Tabs.Settings:AddLeftGroupbox("🌮 Taco Scripts 🌮")
-MiamiBrandGroup:AddLabel("Script: Taco Scripts")
-MiamiBrandGroup:AddLabel("Discord: discord.gg/tacoscripts")
+MiamiBrandGroup = Tabs.Settings:AddLeftGroupbox("🌮 s.jayk Scripts 🌮")
+MiamiBrandGroup:AddLabel("Script: s.jayk Scripts")
+MiamiBrandGroup:AddLabel("Discord: discord.gg/s.jaykscripts")
 MiamiBrandGroup:AddButton("🌮 Copy Discord", function()
-    if setclipboard then setclipboard("https://discord.gg/tacoscripts") end
-    Library:Notify("Taco Scripts\nCopied discord.gg/tacoscripts", 4)
+    if setclipboard then setclipboard("https://discord.gg/s.jaykscripts") end
+    Library:Notify("s.jayk Scripts\nCopied discord.gg/s.jaykscripts", 4)
 end)
 MiamiBrandGroup:AddButton("🌮 Test Button", function()
     getgenv().MiamiSuppressNotifications = false
@@ -689,7 +689,7 @@ function updateWatermarkText()
     ensureMimaiVisualLayer()
     if not MimaiUI.WatermarkLabel then return end
     MimaiUI.WatermarkLabel.Text = string.format(
-        '<font color="#37eb78">Taco Scripts</font>  •  <font color="#3dff8a">discord.gg/tacoscripts</font>  •  <font color="#f5f5f5">%s</font>  •  <font color="#9f9f9f">%s</font>  •  <font color="#3dff8a">%s FPS</font>  •  <font color="#37eb78">%sms</font>  •  <font color="#9f9f9f">%s</font>',
+        '<font color="#37eb78">s.jayk Scripts</font>  •  <font color="#3dff8a">discord.gg/s.jaykscripts</font>  •  <font color="#f5f5f5">%s</font>  •  <font color="#9f9f9f">%s</font>  •  <font color="#3dff8a">%s FPS</font>  •  <font color="#37eb78">%sms</font>  •  <font color="#9f9f9f">%s</font>',
         tostring(MimaiUI.WatermarkStatus or "Loaded"),
         tostring(MimaiUI.WatermarkKey or "RightShift"),
         tostring(MimaiUI.FPS or 0),
@@ -757,7 +757,7 @@ function playMimaiLoadSplash()
     splashTitle.Font = Enum.Font.GothamBlack
     splashTitle.TextSize = 22
     splashTitle.RichText = true
-    splashTitle.Text = '<font color="#37eb78">Taco Scripts</font>'
+    splashTitle.Text = '<font color="#37eb78">s.jayk Scripts</font>'
     splashTitle.TextColor3 = MimaiUI.Text
     splashTitle.ZIndex = 51
     splashTitle.Parent = splash
@@ -768,7 +768,7 @@ function playMimaiLoadSplash()
     splashSub.Size = UDim2.new(1, 0, 0, 20)
     splashSub.Font = Enum.Font.GothamSemibold
     splashSub.TextSize = 12
-    splashSub.Text = 'Welcome to Taco Scripts • Have fun'
+    splashSub.Text = 'Welcome to s.jayk Scripts • Have fun'
     splashSub.TextColor3 = MimaiUI.Muted
     splashSub.ZIndex = 51
     splashSub.Parent = splash
@@ -865,7 +865,7 @@ function createNotificationCard(title, body, duration)
     titleLabel.Font = Enum.Font.GothamBold
     titleLabel.TextSize = 13
     titleLabel.TextXAlignment = Enum.TextXAlignment.Left
-    titleLabel.Text = tostring(title or "🌮 Taco Scripts")
+    titleLabel.Text = tostring(title or "🌮 s.jayk Scripts")
     titleLabel.TextColor3 = MimaiUI.Text
     titleLabel.ZIndex = 22
     titleLabel.Parent = card
@@ -907,7 +907,7 @@ function sendNotification(title, text, duration)
     pcall(createNotificationCard, title, text, duration)
     pcall(function()
         StarterGui:SetCore("SendNotification", {
-            Title = tostring(title or "🌮 Taco Scripts"),
+            Title = tostring(title or "🌮 s.jayk Scripts"),
             Text = tostring(text or ""),
             Duration = duration or 5,
         })
@@ -1524,14 +1524,14 @@ end
 
 
 
-function StartTacoBasketballGameOverlay(opponentOverride)
+function Starts.jaykBasketballGameOverlay(opponentOverride)
     
     
     local TweenService = game:GetService("TweenService")
     local playerGui = LocalPlayer and LocalPlayer:FindFirstChildOfClass("PlayerGui")
     local parent = (gethui and gethui()) or CoreGui or playerGui
 
-    local old = parent and parent:FindFirstChild("TacoBasketballMoneyGame")
+    local old = parent and parent:FindFirstChild("s.jaykBasketballMoneyGame")
     if old then old:Destroy() end
 
     local teams = {
@@ -1542,11 +1542,11 @@ function StartTacoBasketballGameOverlay(opponentOverride)
         ["TITANS"] = {Short = "TTN", Color = Color3.fromRGB(38, 186, 133)},
         ["BLAZERS"] = {Short = "BLZ", Color = Color3.fromRGB(255, 135, 50)},
     }
-    local chosen = tostring(opponentOverride or getgenv().TacoBasketballOpponent or "Random")
+    local chosen = tostring(opponentOverride or getgenv().s.jaykBasketballOpponent or "Random")
     local opponent = teams[chosen] or teams.Random
 
     local gui = Instance.new("ScreenGui")
-    gui.Name = "TacoBasketballMoneyGame"
+    gui.Name = "s.jaykBasketballMoneyGame"
     gui.ResetOnSpawn = false
     gui.IgnoreGuiInset = true
     gui.DisplayOrder = 99998
@@ -1554,7 +1554,7 @@ function StartTacoBasketballGameOverlay(opponentOverride)
     if not gui.Parent then return function() end end
 
     local frame = Instance.new("Frame")
-    frame.Name = "TacoBasketballScoreboard"
+    frame.Name = "s.jaykBasketballScoreboard"
     frame.AnchorPoint = Vector2.new(0.5, 0)
     frame.Position = UDim2.new(0.5, 0, 0, -440)
     frame.Size = UDim2.fromOffset(560, 420)
@@ -1578,7 +1578,7 @@ function StartTacoBasketballGameOverlay(opponentOverride)
     header.Font = Enum.Font.GothamBlack
     header.TextSize = 15
     header.TextColor3 = Color3.fromRGB(255, 222, 104)
-    header.Text = "TACO SCRIPTS  •  LIVE BASKETBALL"
+    header.Text = "s.jayk SCRIPTS  •  LIVE BASKETBALL"
     header.Parent = frame
 
     local period = Instance.new("TextLabel")
@@ -1751,7 +1751,7 @@ function StartTacoBasketballGameOverlay(opponentOverride)
     courtCaption.ZIndex = 5
     courtCaption.Parent = court
 
-    local tacoColor = Color3.fromRGB(255, 207, 60)
+    local s.jaykColor = Color3.fromRGB(255, 207, 60)
     local function makeCourtPlayer(teamColor, number, point)
         local player = Instance.new("Frame")
         player.Name = "CourtPlayer_" .. tostring(number)
@@ -1783,7 +1783,7 @@ function StartTacoBasketballGameOverlay(opponentOverride)
         return player
     end
 
-    local tacoSpots = {
+    local s.jaykSpots = {
         Vector2.new(0.16, 0.26), Vector2.new(0.28, 0.70), Vector2.new(0.40, 0.42),
         Vector2.new(0.33, 0.18), Vector2.new(0.22, 0.52),
     }
@@ -1791,9 +1791,9 @@ function StartTacoBasketballGameOverlay(opponentOverride)
         Vector2.new(0.84, 0.74), Vector2.new(0.72, 0.30), Vector2.new(0.60, 0.58),
         Vector2.new(0.67, 0.82), Vector2.new(0.78, 0.47),
     }
-    local tacoPlayers, opponentPlayers = {}, {}
-    for i, point in ipairs(tacoSpots) do
-        tacoPlayers[i] = makeCourtPlayer(tacoColor, i + 1, point)
+    local s.jaykPlayers, opponentPlayers = {}, {}
+    for i, point in ipairs(s.jaykSpots) do
+        s.jaykPlayers[i] = makeCourtPlayer(s.jaykColor, i + 1, point)
     end
     for i, point in ipairs(opponentSpots) do
         opponentPlayers[i] = makeCourtPlayer(opponent.Color, i + 10, point)
@@ -1803,7 +1803,7 @@ function StartTacoBasketballGameOverlay(opponentOverride)
     ball.Name = "Basketball"
     ball.AnchorPoint = Vector2.new(0.5, 0.5)
     ball.Size = UDim2.fromOffset(14, 14)
-    ball.Position = tacoPlayers[1].Position
+    ball.Position = s.jaykPlayers[1].Position
     ball.BackgroundColor3 = Color3.fromRGB(235, 112, 38)
     ball.BorderSizePixel = 0
     ball.ZIndex = 12
@@ -1851,21 +1851,21 @@ function StartTacoBasketballGameOverlay(opponentOverride)
         end
     end
 
-    local function animatePossession(tacoHasBall, scored)
-        local offense = tacoHasBall and tacoPlayers or opponentPlayers
-        local defense = tacoHasBall and opponentPlayers or tacoPlayers
-        local shootingSide = tacoHasBall and 0.965 or 0.035
+    local function animatePossession(s.jaykHasBall, scored)
+        local offense = s.jaykHasBall and s.jaykPlayers or opponentPlayers
+        local defense = s.jaykHasBall and opponentPlayers or s.jaykPlayers
+        local shootingSide = s.jaykHasBall and 0.965 or 0.035
 
         
         for i, player in ipairs(offense) do
             tweenPlayer(player, Vector2.new(
-                math.clamp((tacoHasBall and 0.16 or 0.84) + (math.random(-12, 12) / 100), 0.09, 0.91),
+                math.clamp((s.jaykHasBall and 0.16 or 0.84) + (math.random(-12, 12) / 100), 0.09, 0.91),
                 math.clamp(0.18 + ((i - 1) * 0.15) + (math.random(-7, 7) / 100), 0.12, 0.86)
             ), 0.45)
         end
         for i, player in ipairs(defense) do
             tweenPlayer(player, Vector2.new(
-                math.clamp((tacoHasBall and 0.62 or 0.38) + (math.random(-14, 14) / 100), 0.10, 0.90),
+                math.clamp((s.jaykHasBall and 0.62 or 0.38) + (math.random(-14, 14) / 100), 0.10, 0.90),
                 math.clamp(0.18 + ((i - 1) * 0.15) + (math.random(-8, 8) / 100), 0.12, 0.86)
             ), 0.45)
         end
@@ -1893,14 +1893,14 @@ function StartTacoBasketballGameOverlay(opponentOverride)
         end
     end
 
-    local tacoScore, opponentScore = 0, 0
+    local s.jaykScore, opponentScore = 0, 0
     local quarter, seconds, running, finished = 1, 12 * 60, true, false
 
     
     task.spawn(function()
         while running and court.Parent do
             task.wait(1.15)
-            for _, player in ipairs(tacoPlayers) do
+            for _, player in ipairs(s.jaykPlayers) do
                 tweenPlayer(player, Vector2.new(
                     math.clamp(player.Position.X.Scale + math.random(-4, 4) / 100, 0.10, 0.48),
                     math.clamp(player.Position.Y.Scale + math.random(-5, 5) / 100, 0.13, 0.87)
@@ -1927,7 +1927,7 @@ function StartTacoBasketballGameOverlay(opponentOverride)
         local mins = math.max(0, math.floor(seconds / 60))
         local secs = math.max(0, seconds % 60)
         period.Text = string.format("Q%d  %02d:%02d", quarter, mins, secs)
-        left.Text = "TRP  " .. tacoScore
+        left.Text = "TRP  " .. s.jaykScore
         right.Text = opponent.Short .. "  " .. opponentScore
         if lastPlay then play.Text = lastPlay end
         local pct = math.clamp(((quarter - 1) + (1 - seconds / 720)) / 4, 0.04, 0.96)
@@ -1947,12 +1947,12 @@ function StartTacoBasketballGameOverlay(opponentOverride)
                 quarter = quarter < 4 and quarter + 1 or 4
                 seconds = quarter < 4 and 12 * 60 or 0
             end
-            local tacoScored = math.random(1, 100) <= 56
+            local s.jaykScored = math.random(1, 100) <= 56
             local points = math.random(1, 100) <= 28 and 3 or 2
-            animatePossession(tacoScored, true)
-            if tacoScored then
-                tacoScore = tacoScore + points
-                refresh("TACO " .. tostring(points) .. " POINTS — " .. plays[math.random(1, #plays)])
+            animatePossession(s.jaykScored, true)
+            if s.jaykScored then
+                s.jaykScore = s.jaykScore + points
+                refresh("s.jayk " .. tostring(points) .. " POINTS — " .. plays[math.random(1, #plays)])
             else
                 opponentScore = opponentScore + points
                 refresh(opponent.Short .. " " .. tostring(points) .. " POINTS — answers on the next possession.")
@@ -1964,9 +1964,9 @@ function StartTacoBasketballGameOverlay(opponentOverride)
         if finished then return end
         finished, running = true, false
         if success ~= false then
-            tacoScore = math.max(tacoScore, opponentScore + math.random(2, 9))
+            s.jaykScore = math.max(s.jaykScore, opponentScore + math.random(2, 9))
             progress.Size = UDim2.new(1, 0, 1, 0)
-            refresh("FINAL — TACO wins " .. tacoScore .. "–" .. opponentScore .. ". Maximum money generated.")
+            refresh("FINAL — s.jayk wins " .. s.jaykScore .. "–" .. opponentScore .. ". Maximum money generated.")
         else
             refresh("GAME PAUSED — money generation stopped before the final buzzer.")
         end
@@ -4714,7 +4714,7 @@ local function refreshOrbFlashState()
     end
 end
 
-GonModsSection:AddToggle("TacoFlashbangBullets", {
+GonModsSection:AddToggle("s.jaykFlashbangBullets", {
     Text = "Flashbang Bullets",
     Default = false,
     Callback = function(state)
@@ -4724,7 +4724,7 @@ GonModsSection:AddToggle("TacoFlashbangBullets", {
     end,
 })
 
-GonModsSection:AddToggle("TacoTornadoBullets", {
+GonModsSection:AddToggle("s.jaykTornadoBullets", {
     Text = "Tornado Bullets",
     Default = false,
     Callback = function(state)
@@ -4734,7 +4734,7 @@ GonModsSection:AddToggle("TacoTornadoBullets", {
     end,
 })
 
-GonModsSection:AddSlider("TacoTornadoSpeed", {
+GonModsSection:AddSlider("s.jaykTornadoSpeed", {
     Text = "Tornado Speed",
     Min = 1,
     Max = 500,
@@ -4760,10 +4760,10 @@ Library:OnUnload(function()
 end)
 
 local SprayPaintImagePresets = {
-    ["Taco Scripts"] = 93586114576894,
+    ["s.jayk Scripts"] = 93586114576894,
 }
-local SprayPaintImageNames = {"Taco Scripts"}
-local SelectedSprayPaintImage = "Taco Scripts"
+local SprayPaintImageNames = {"s.jayk Scripts"}
+local SelectedSprayPaintImage = "s.jayk Scripts"
 local SPRAYPAINT_IMAGE_ID = SprayPaintImagePresets[SelectedSprayPaintImage]
 local SPRAYPAINT_IMAGE = "rbxassetid://" .. tostring(SPRAYPAINT_IMAGE_ID)
 SprayPaintEnabled = false
@@ -4898,7 +4898,7 @@ GonModsSection:AddDropdown("SprayPaintImagePreset", {
     Default = SelectedSprayPaintImage,
     Callback = function(value)
         SelectedSprayPaintImage = tostring(value)
-        SPRAYPAINT_IMAGE_ID = SprayPaintImagePresets[SelectedSprayPaintImage] or SprayPaintImagePresets["Taco Scripts"]
+        SPRAYPAINT_IMAGE_ID = SprayPaintImagePresets[SelectedSprayPaintImage] or SprayPaintImagePresets["s.jayk Scripts"]
         SPRAYPAINT_IMAGE = "rbxassetid://" .. tostring(SPRAYPAINT_IMAGE_ID)
         if SprayPaintEnabled then ScanSprayPaintSettings() end
         sendNotification("Spraypaint", "Selected " .. SelectedSprayPaintImage .. " image.")
@@ -5167,7 +5167,7 @@ ExtraMoneyGroup = Tabs.Player:AddLeftGroupbox("🌮 Money Actions")
 
 ExtraMoneyGroup:AddButton("Manual [Inf Money]", function()
     sendNotification("Inf Money", "Triggered.")
-    local finishBasketballGame = StartTacoBasketballGameOverlay()
+    local finishBasketballGame = Starts.jaykBasketballGameOverlay()
     task.spawn(function()
         local ok, err = pcall(InfMoneyHoldCupz)
         if finishBasketballGame then finishBasketballGame(ok) end
@@ -5565,21 +5565,21 @@ function SetNoRentPayEnabled(state)
 end
 
 
-TacoFPSBoostEnabled = false
-TacoFPSBoostSaved = {}
-TacoFPSBoostConnection = nil
-TacoFPSBoostGlobalState = nil
+s.jaykFPSBoostEnabled = false
+s.jaykFPSBoostSaved = {}
+s.jaykFPSBoostConnection = nil
+s.jaykFPSBoostGlobalState = nil
 
 local function SaveFPSProperty(object, property)
-    TacoFPSBoostSaved[object] = TacoFPSBoostSaved[object] or {}
-    if TacoFPSBoostSaved[object][property] == nil then
+    s.jaykFPSBoostSaved[object] = s.jaykFPSBoostSaved[object] or {}
+    if s.jaykFPSBoostSaved[object][property] == nil then
         local ok, value = pcall(function() return object[property] end)
-        if ok then TacoFPSBoostSaved[object][property] = value end
+        if ok then s.jaykFPSBoostSaved[object][property] = value end
     end
 end
 
 local function ApplyFPSBoostObject(object)
-    if not TacoFPSBoostEnabled or not object then return end
+    if not s.jaykFPSBoostEnabled or not object then return end
 
     if object:IsA("BasePart") then
         SaveFPSProperty(object, "Material")
@@ -5603,16 +5603,16 @@ local function ApplyFPSBoostObject(object)
     end
 end
 
-function SetTacoFPSBoost(state)
-    TacoFPSBoostEnabled = state == true
+function Sets.jaykFPSBoost(state)
+    s.jaykFPSBoostEnabled = state == true
 
-    if TacoFPSBoostConnection then
-        TacoFPSBoostConnection:Disconnect()
-        TacoFPSBoostConnection = nil
+    if s.jaykFPSBoostConnection then
+        s.jaykFPSBoostConnection:Disconnect()
+        s.jaykFPSBoostConnection = nil
     end
 
-    if TacoFPSBoostEnabled then
-        TacoFPSBoostGlobalState = {
+    if s.jaykFPSBoostEnabled then
+        s.jaykFPSBoostGlobalState = {
             GlobalShadows = Lighting.GlobalShadows,
             FogEnd = Lighting.FogEnd,
             TerrainWaterWaveSize = workspace.Terrain.WaterWaveSize,
@@ -5621,7 +5621,7 @@ function SetTacoFPSBoost(state)
             TerrainWaterTransparency = workspace.Terrain.WaterTransparency,
         }
         pcall(function()
-            TacoFPSBoostGlobalState.QualityLevel = settings().Rendering.QualityLevel
+            s.jaykFPSBoostGlobalState.QualityLevel = settings().Rendering.QualityLevel
             settings().Rendering.QualityLevel = Enum.QualityLevel.Level01
         end)
         pcall(function()
@@ -5636,20 +5636,20 @@ function SetTacoFPSBoost(state)
         for _, object in ipairs(workspace:GetDescendants()) do ApplyFPSBoostObject(object) end
         for _, object in ipairs(Lighting:GetDescendants()) do ApplyFPSBoostObject(object) end
 
-        TacoFPSBoostConnection = workspace.DescendantAdded:Connect(function(object)
+        s.jaykFPSBoostConnection = workspace.DescendantAdded:Connect(function(object)
             task.defer(ApplyFPSBoostObject, object)
         end)
     else
-        for object, properties in pairs(TacoFPSBoostSaved) do
+        for object, properties in pairs(s.jaykFPSBoostSaved) do
             if object and object.Parent then
                 for property, value in pairs(properties) do
                     pcall(function() object[property] = value end)
                 end
             end
-            TacoFPSBoostSaved[object] = nil
+            s.jaykFPSBoostSaved[object] = nil
         end
 
-        local saved = TacoFPSBoostGlobalState
+        local saved = s.jaykFPSBoostGlobalState
         if saved then
             pcall(function()
                 Lighting.GlobalShadows = saved.GlobalShadows
@@ -5661,12 +5661,12 @@ function SetTacoFPSBoost(state)
                 if saved.QualityLevel then settings().Rendering.QualityLevel = saved.QualityLevel end
             end)
         end
-        TacoFPSBoostGlobalState = nil
+        s.jaykFPSBoostGlobalState = nil
     end
 end
 
 Library:OnUnload(function()
-    SetTacoFPSBoost(false)
+    Sets.jaykFPSBoost(false)
 end)
 
 function loadAutofarmTabElements()
@@ -5852,11 +5852,11 @@ function loadAutofarmTabElements()
 
     
     local PlayerLocalSection = Tabs.Player:AddLeftGroupbox("🌮 Local Player")
-    PlayerLocalSection:AddToggle("TacoFPSBoost", {
+    PlayerLocalSection:AddToggle("s.jaykFPSBoost", {
         Text = "FPS Boost (Low Graphics)",
         Default = false,
         Callback = function(state)
-            SetTacoFPSBoost(state)
+            Sets.jaykFPSBoost(state)
             sendNotification("FPS Boost", state and "Low graphics enabled" or "Graphics restored")
         end,
     })
@@ -6790,11 +6790,11 @@ RunService.RenderStepped:Connect(function()
 end)
 
 
-local TACO_SKY_ASSET = "rbxassetid://93586114576894"
+local s.jayk_SKY_ASSET = "rbxassetid://93586114576894"
 SkyBackgroundPresets = {
-    ["Taco Scripts"] = "rbxassetid://93586114576894",
+    ["s.jayk Scripts"] = "rbxassetid://93586114576894",
 }
-SkyBackgroundNames = {"Taco Scripts"}
+SkyBackgroundNames = {"s.jayk Scripts"}
 
 function clearAllSkies()
     pcall(function()
@@ -6806,11 +6806,11 @@ function clearAllSkies()
     end)
 end
 
-function applyTacoSky(asset, displayName)
-    asset = tostring(asset or TACO_SKY_ASSET)
+function applys.jaykSky(asset, displayName)
+    asset = tostring(asset or s.jayk_SKY_ASSET)
     clearAllSkies()
     local sky = Instance.new("Sky")
-    sky.Name = tostring(displayName or "Taco Scripts") .. " Sky"
+    sky.Name = tostring(displayName or "s.jayk Scripts") .. " Sky"
     sky.SkyboxBk = asset
     sky.SkyboxDn = asset
     sky.SkyboxFt = asset
@@ -6823,7 +6823,7 @@ function applyTacoSky(asset, displayName)
 end
 
 function applyWindUIBackground(asset)
-    asset = tostring(asset or TACO_SKY_ASSET)
+    asset = tostring(asset or s.jayk_SKY_ASSET)
     local window = Library and Library._activeWindow
     local nativeWindow = window and window._window
     if nativeWindow and nativeWindow.SetBackgroundImage then
@@ -6880,10 +6880,10 @@ function loadVisualsTabElements()
     })
 
     local SkySection = Tabs.Visuals:AddLeftGroupbox("Sky / Script Background")
-    local selectedSkyName = "Taco Scripts"
-    local selectedBackgroundName = "Taco Scripts"
+    local selectedSkyName = "s.jayk Scripts"
+    local selectedBackgroundName = "s.jayk Scripts"
 
-    SkySection:AddDropdown("TacoSkyImageSelect", {
+    SkySection:AddDropdown("s.jaykSkyImageSelect", {
         Text = "Sky Image",
         Values = SkyBackgroundNames,
         Default = selectedSkyName,
@@ -6894,12 +6894,12 @@ function loadVisualsTabElements()
     SkySection:AddButton("Apply Selected Sky", function()
         local asset = SkyBackgroundPresets[selectedSkyName]
         if asset then
-            applyTacoSky(asset, selectedSkyName)
+            applys.jaykSky(asset, selectedSkyName)
             sendNotification("Sky", "Applied " .. tostring(selectedSkyName) .. " sky.")
         end
     end)
 
-    SkySection:AddDropdown("TacoScriptBackgroundSelect", {
+    SkySection:AddDropdown("s.jaykScriptBackgroundSelect", {
         Text = "Script Background",
         Values = SkyBackgroundNames,
         Default = selectedBackgroundName,
@@ -6920,11 +6920,11 @@ function loadVisualsTabElements()
         local asset = SkyBackgroundPresets[selectedSkyName]
         if not asset then return end
         selectedBackgroundName = selectedSkyName
-        applyTacoSky(asset, selectedSkyName)
+        applys.jaykSky(asset, selectedSkyName)
         applyWindUIBackground(asset)
         sendNotification("Sky / Background", "Applied " .. tostring(selectedSkyName) .. " to both.")
     end)
-    applyTacoSky(TACO_SKY_ASSET, "Taco Scripts")
+    applys.jaykSky(s.jayk_SKY_ASSET, "s.jayk Scripts")
 
     
     local ESPMainSection = Tabs.Visuals:AddRightGroupbox("🌮 Player ESP")
@@ -7181,8 +7181,8 @@ do
 
 MenuGroup = Tabs.Settings:AddLeftGroupbox("🌮 Menu Settings")
 
-MenuGroup:AddLabel("Script: Taco Scripts", true)
-MenuGroup:AddLabel("Discord: discord.gg/tacoscripts", true)
+MenuGroup:AddLabel("Script: s.jayk Scripts", true)
+MenuGroup:AddLabel("Discord: discord.gg/s.jaykscripts", true)
 MenuGroup:AddLabel("Game: THA BRONX 3🌮", true)
 MenuGroup:AddLabel("Developed By Zap", true)
 MenuGroup:AddLabel("Status: Premium Visuals Loaded 🌮", true)
@@ -7229,7 +7229,7 @@ end)
 MenuGroup:AddButton({
     Text = 'Copy Discord',
     Func = function()
-       setclipboard("https://discord.gg/tacoscripts")
+       setclipboard("https://discord.gg/s.jaykscripts")
        Library:Notify("Copied Discord to clipboard", 10)
     end,
 })
@@ -7241,10 +7241,10 @@ getgenv().MiamiHeadTagSettings = getgenv().MiamiHeadTagSettings or {}
 local HeadTagSettings = getgenv().MiamiHeadTagSettings
 if HeadTagSettings.StyleVersion ~= 4 then
     HeadTagSettings.Enabled = HeadTagSettings.Enabled ~= false
-    HeadTagSettings.Text = HeadTagSettings.Text or "discord.gg/tacoscripts"
+    HeadTagSettings.Text = HeadTagSettings.Text or "discord.gg/s.jaykscripts"
     HeadTagSettings.Size = 32
     HeadTagSettings.Height = 3.4
-    HeadTagSettings.Style = "Taco Green"
+    HeadTagSettings.Style = "s.jayk Green"
     HeadTagSettings.Font = "GothamBlack"
     HeadTagSettings.Color = "Gold"
     HeadTagSettings.Rainbow = false
@@ -7253,7 +7253,7 @@ if HeadTagSettings.StyleVersion ~= 4 then
     HeadTagSettings.StyleVersion = 4
 end
 
-HeadTagGroup = Tabs.Settings:AddRightGroupbox("Taco Scripts Head Text")
+HeadTagGroup = Tabs.Settings:AddRightGroupbox("s.jayk Scripts Head Text")
 HeadTagGroup:AddToggle("MiamiHeadTagEnabled", {
     Text = "Enable Head Text", Default = HeadTagSettings.Enabled,
     Callback = function(value)
@@ -7267,12 +7267,12 @@ HeadTagGroup:AddInput("MiamiHeadTagText", {
     Text = "Text", Default = HeadTagSettings.Text, Placeholder = "Text above your head",
     Numeric = false, Finished = true,
     Callback = function(value)
-        HeadTagSettings.Text = tostring(value or "") ~= "" and tostring(value) or "discord.gg/tacoscripts"
+        HeadTagSettings.Text = tostring(value or "") ~= "" and tostring(value) or "discord.gg/s.jaykscripts"
     end
 })
 HeadTagGroup:AddDropdown("MiamiHeadTagStyle", {
     Text = "Text Animation",
-    Values = {"Taco Green", "Taco Wave", "Rainbow Wave", "Fire", "Ice", "Toxic", "Royal"},
+    Values = {"s.jayk Green", "s.jayk Wave", "Rainbow Wave", "Fire", "Ice", "Toxic", "Royal"},
     Default = HeadTagSettings.Style,
     Callback = function(value) HeadTagSettings.Style = normalizeDropdownValue(value) end
 })
@@ -7281,7 +7281,7 @@ HeadTagGroup:AddDropdown("MiamiHeadTagFont", {
     Default = HeadTagSettings.Font,
     Callback = function(value) HeadTagSettings.Font = normalizeDropdownValue(value) end
 })
-HeadTagGroup:AddDropdown("TacoHeadTagColor", {
+HeadTagGroup:AddDropdown("s.jaykHeadTagColor", {
     Text = "Text Color",
     Values = {"Gold", "White", "Orange", "Red", "Green", "Blue", "Purple", "Pink", "Cyan", "Use Animation"},
     Default = HeadTagSettings.Color,
@@ -7445,8 +7445,8 @@ end)
 
 task.spawn(function()
     local Palettes = {
-        ["Taco Wave"] = {Color3.fromRGB(255, 198, 48), Color3.fromRGB(255, 236, 143), Color3.fromRGB(255, 155, 40)},
-        ["Taco Green"] = {Color3.fromRGB(255, 198, 48), Color3.fromRGB(255, 236, 143), Color3.fromRGB(255, 198, 48)},
+        ["s.jayk Wave"] = {Color3.fromRGB(255, 198, 48), Color3.fromRGB(255, 236, 143), Color3.fromRGB(255, 155, 40)},
+        ["s.jayk Green"] = {Color3.fromRGB(255, 198, 48), Color3.fromRGB(255, 236, 143), Color3.fromRGB(255, 198, 48)},
         ["Fire"] = {Color3.fromRGB(255, 30, 0), Color3.fromRGB(255, 225, 0), Color3.fromRGB(255, 80, 0)},
         ["Ice"] = {Color3.fromRGB(0, 125, 255), Color3.fromRGB(245, 255, 255), Color3.fromRGB(0, 255, 235)},
         ["Toxic"] = {Color3.fromRGB(40, 255, 0), Color3.fromRGB(220, 255, 0), Color3.fromRGB(0, 145, 55)},
@@ -7509,10 +7509,10 @@ task.spawn(function()
             local timeValue = 0
             while label.Parent do
                 local current = getgenv().MiamiHeadTagSettings or {}
-                local text = tostring(current.Text or "discord.gg/tacoscripts")
+                local text = tostring(current.Text or "discord.gg/s.jaykscripts")
                 local size = tonumber(current.Size) or 32
                 local speed = tonumber(current.Speed) or 8
-                local style = current.Style or "Taco Green"
+                local style = current.Style or "s.jayk Green"
                 timeValue = timeValue + 0.003 * speed
 
                 local sequence
@@ -7532,7 +7532,7 @@ task.spawn(function()
                         ColorSequenceKeypoint.new(1, selectedColor),
                     }
                 else
-                    local colors = Palettes[style] or Palettes["Taco Green"]
+                    local colors = Palettes[style] or Palettes["s.jayk Green"]
                     sequence = ColorSequence.new{
                         ColorSequenceKeypoint.new(0, colors[1]),
                         ColorSequenceKeypoint.new(0.5, colors[2]),
