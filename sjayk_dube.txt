@@ -1,0 +1,261 @@
+-- sjayk Safe Dupe | Compact standalone version
+-- Original Safe Dupe logic retained; unrelated script sections removed.
+
+local Players = game:GetService("Players")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local LocalPlayer = Players.LocalPlayer
+local BackpackRemote = ReplicatedStorage:WaitForChild("BackpackRemote")
+local InventoryRemote = ReplicatedStorage:WaitForChild("Inventory")
+
+local BLACKLIST = {
+    Fists=true, Fist=true, Phone=true, ["Car Keys"]=true, ["Car keys"]=true,
+    Bandage=true, ["762s"]=true, ["556s"]=true, Extended=true,
+    ["T shirt"]=true, Combat=true, Weight=true, Shiesty=true, Lemonade=true,
+}
+
+local running = false
+local dupeCount = 0
+local targetCount = 15 -- set to math.huge for infinite
+local delayBetween = 0.2
+
+local function notify(message)
+    pcall(function()
+        game:GetService("StarterGui"):SetCore("SendNotification", {
+            Title = "Safe Dupe", Text = message, Duration = 3
+        })
+    end)
+end
+
+local function getRoot()
+    local char = LocalPlayer.Character
+    return char and char:FindFirstChild("HumanoidRootPart")
+end
+
+local function silentTeleport(cf)
+    local char = LocalPlayer.Character
+    local root = char and char:FindFirstChild("HumanoidRootPart")
+    local hum = char and char:FindFirstChildOfClass("Humanoid")
+    if not root then return false end
+    if hum then hum:ChangeState(0) end
+    local started = tick()
+    repeat task.wait() until not LocalPlayer:GetAttribute("LastACPos") or tick() - started > 1
+    root.CFrame = cf
+    root.AssemblyLinearVelocity = Vector3.zero
+    root.AssemblyAngularVelocity = Vector3.zero
+    task.wait(0.5)
+    if hum then hum:ChangeState(Enum.HumanoidStateType.GettingUp) end
+    return true
+end
+
+local function getActiveSafe()
+    local function isMine(owner)
+        if owner:IsA("ObjectValue") then return owner.Value == LocalPlayer end
+        local value = tostring(owner.Value or "")
+        return value == LocalPlayer.Name or value == LocalPlayer.DisplayName
+    end
+    for _, owner in ipairs(workspace:GetDescendants()) do
+        if owner.Name:lower() == "owner"
+            and (owner:IsA("StringValue") or owner:IsA("ObjectValue"))
+            and isMine(owner) then
+            local ancestor = owner.Parent
+            while ancestor and ancestor ~= workspace do
+                local safe = ancestor:FindFirstChild("Safe", true)
+                if safe then
+                    local part = safe:IsA("BasePart") and safe
+                        or safe:FindFirstChild("Union", true)
+                        or safe:FindFirstChildWhichIsA("BasePart", true)
+                    if part then return safe, part.CFrame end
+                end
+                ancestor = ancestor.Parent
+            end
+        end
+    end
+    return nil, nil
+end
+
+local function getLockedTools()
+    local found, list = {}, {}
+    local function scan(container)
+        if not container then return end
+        for _, tool in ipairs(container:GetChildren()) do
+            if tool:IsA("Tool") and not BLACKLIST[tool.Name] and not found[tool.Name] then
+                found[tool.Name] = true
+                table.insert(list, tool.Name)
+            end
+        end
+    end
+    scan(LocalPlayer:FindFirstChild("Backpack"))
+    scan(LocalPlayer.Character)
+    table.sort(list)
+    return list
+end
+
+local function fireSafePrompts(safe)
+    local fired = 0
+    for _, prompt in ipairs(safe:GetDescendants()) do
+        if prompt:IsA("ProximityPrompt") and prompt.Enabled then
+            local oldHold, oldLOS = prompt.HoldDuration, prompt.RequiresLineOfSight
+            pcall(function()
+                prompt.HoldDuration = 0
+                prompt.RequiresLineOfSight = false
+                fireproximityprompt(prompt)
+                fired += 1
+            end)
+            pcall(function()
+                prompt.HoldDuration = oldHold
+                prompt.RequiresLineOfSight = oldLOS
+            end)
+        end
+    end
+    return fired
+end
+
+local function dupeOnce(itemName, returnCFrame)
+    local safe, safeCF = getActiveSafe()
+    if not safe or not safeCF then return false, "You must own a house with a Safe." end
+    if not silentTeleport(safeCF * CFrame.new(0, 2, 0)) then return false, "Character not found." end
+    task.wait(0.3)
+    pcall(function() task.spawn(function() BackpackRemote:InvokeServer("Store", itemName) end) end)
+    pcall(function() task.spawn(function() InventoryRemote:FireServer("Change", itemName, "Backpack", safe) end) end)
+    task.wait(0.6)
+    silentTeleport(returnCFrame)
+    task.wait(1.2)
+    pcall(function() BackpackRemote:InvokeServer("Grab", itemName) end)
+    task.wait(0.5)
+    return true
+end
+
+-- Compact dark UI, English-only, with no item-selection dropdown.
+local playerGui = LocalPlayer:WaitForChild("PlayerGui")
+local previous = playerGui:FindFirstChild("sjaykSafeDupeCompact")
+if previous then previous:Destroy() end
+local gui = Instance.new("ScreenGui")
+gui.Name = "sjaykSafeDupeCompact"
+gui.ResetOnSpawn = false
+gui.Parent = playerGui
+
+local frame = Instance.new("Frame")
+frame.Size = UDim2.fromOffset(250, 190)
+frame.Position = UDim2.new(0.5, -125, 0.5, -95)
+frame.BackgroundColor3 = Color3.fromRGB(14, 17, 15)
+frame.BorderSizePixel = 0
+frame.Active = true
+frame.Draggable = true
+frame.Parent = gui
+Instance.new("UICorner", frame).CornerRadius = UDim.new(0, 10)
+local stroke = Instance.new("UIStroke", frame)
+stroke.Color = Color3.fromRGB(45, 135, 78)
+stroke.Thickness = 1.2
+
+-- Floating S button: hide/show the main panel without using an image.
+local toggle = Instance.new("TextButton")
+toggle.Name = "ToggleButton"
+toggle.Size = UDim2.fromOffset(44, 44)
+toggle.Position = UDim2.new(0.5, 135, 0.5, -22)
+toggle.BackgroundColor3 = Color3.fromRGB(10, 14, 11)
+toggle.BorderSizePixel = 0
+toggle.Font = Enum.Font.GothamBlack
+toggle.Text = "S"
+toggle.TextSize = 24
+toggle.TextColor3 = Color3.fromRGB(75, 210, 120)
+toggle.AutoButtonColor = true
+toggle.Active = true
+toggle.Draggable = true
+toggle.Parent = gui
+Instance.new("UICorner", toggle).CornerRadius = UDim.new(0, 10)
+local toggleStroke = Instance.new("UIStroke", toggle)
+toggleStroke.Color = Color3.fromRGB(45, 180, 90)
+toggleStroke.Thickness = 2
+
+toggle.MouseButton1Click:Connect(function()
+    frame.Visible = not frame.Visible
+end)
+
+local function label(text, pos, size, fontSize)
+    local obj = Instance.new("TextLabel")
+    obj.BackgroundTransparency = 1
+    obj.Position = pos
+    obj.Size = size
+    obj.Font = Enum.Font.GothamSemibold
+    obj.Text = text
+    obj.TextSize = fontSize or 12
+    obj.TextColor3 = Color3.fromRGB(225, 235, 228)
+    obj.TextXAlignment = Enum.TextXAlignment.Left
+    obj.Parent = frame
+    return obj
+end
+
+label("SJAYK  /  SAFE DUPE", UDim2.fromOffset(13, 8), UDim2.new(1, -26, 0, 23), 14).TextColor3 = Color3.fromRGB(75, 190, 110)
+label("Automatically cycles through backpack tools", UDim2.fromOffset(13, 31), UDim2.new(1, -26, 0, 18), 10).TextColor3 = Color3.fromRGB(155, 170, 160)
+local status = label("Status: Idle", UDim2.fromOffset(13, 54), UDim2.new(1, -26, 0, 18), 11)
+local countLabel = label("Duplicated: 0", UDim2.fromOffset(13, 73), UDim2.new(1, -26, 0, 18), 11)
+
+local function button(text, y, color)
+    local b = Instance.new("TextButton")
+    b.Size = UDim2.new(1, -26, 0, 29)
+    b.Position = UDim2.fromOffset(13, y)
+    b.BackgroundColor3 = color
+    b.BorderSizePixel = 0
+    b.Font = Enum.Font.GothamBold
+    b.Text = text
+    b.TextSize = 11
+    b.TextColor3 = Color3.fromRGB(240, 245, 241)
+    b.AutoButtonColor = true
+    b.Parent = frame
+    Instance.new("UICorner", b).CornerRadius = UDim.new(0, 6)
+    return b
+end
+
+local startButton = button("START  /  15 TIMES", 99, Color3.fromRGB(30, 105, 57))
+local infiniteButton = button("START INFINITE", 132, Color3.fromRGB(25, 75, 44))
+local stopButton = button("STOP", 165, Color3.fromRGB(90, 38, 38))
+
+local function startDupe(amount)
+    if running then return end
+    local root = getRoot()
+    if not root then notify("Character not found."); return end
+    local safe, safeCF = getActiveSafe()
+    if not safe or not safeCF then notify("You must own a house with a Safe."); return end
+    local tools = getLockedTools()
+    if #tools == 0 then notify("No usable tools found in inventory."); return end
+    running = true
+    targetCount = amount
+    local returnCF = root.CFrame
+    status.Text = amount == math.huge and "Status: Running (Infinite)" or "Status: Running"
+    notify("Safe Dupe started.")
+    task.spawn(function()
+        silentTeleport(safeCF * CFrame.new(0, 2, 0))
+        task.wait(0.7)
+        fireSafePrompts(safe)
+        silentTeleport(returnCF)
+        task.wait(0.5)
+        local index = 1
+        local completed = 0
+        while running and (amount == math.huge or completed < amount) do
+            local current = getLockedTools()
+            if #current == 0 then
+                -- Keep the original inventory scan behavior; stop if no tools remain.
+                break
+            end
+            if index > #current then index = 1 end
+            local ok = dupeOnce(current[index], returnCF)
+            if ok then
+                completed += 1
+                dupeCount += 1
+                countLabel.Text = "Duplicated: " .. tostring(dupeCount)
+            end
+            index += 1
+            task.wait(delayBetween)
+        end
+        running = false
+        status.Text = "Status: Idle"
+        notify("Safe Dupe stopped. This run: " .. tostring(completed))
+    end)
+end
+
+startButton.MouseButton1Click:Connect(function() startDupe(15) end)
+infiniteButton.MouseButton1Click:Connect(function() startDupe(math.huge) end)
+stopButton.MouseButton1Click:Connect(function()
+    running = false
+    status.Text = "Status: Stopping..."
+end)
