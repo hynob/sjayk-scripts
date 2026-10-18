@@ -1,0 +1,84 @@
+local Players = game:GetService("Players")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+
+local Player = Players.LocalPlayer
+local Backpack = Player:WaitForChild("Backpack")
+
+local function GetTools()
+    local Tools = {}
+
+    for _, Tool in ipairs(Backpack:GetChildren()) do
+        if Tool:IsA("Tool") then
+            table.insert(Tools, Tool)
+        end
+    end
+
+    local Character = Player.Character
+    if Character then
+        for _, Tool in ipairs(Character:GetChildren()) do
+            if Tool:IsA("Tool") then
+                table.insert(Tools, Tool)
+            end
+        end
+    end
+
+    return Tools
+end
+
+local function DupeItem(Tool)
+    if not Tool or not Tool:IsA("Tool") then
+        return false
+    end
+
+    local BackpackRemote = ReplicatedStorage:FindFirstChild("BackpackRemote")
+    local ListWeaponRemote = ReplicatedStorage:FindFirstChild("ListWeaponRemote")
+
+    if not BackpackRemote or not ListWeaponRemote then
+        return false
+    end
+
+    local ToolName = Tool.Name
+
+    local Success = pcall(function()
+        ListWeaponRemote:FireServer(ToolName, 99999)
+        task.wait(0.3)
+        BackpackRemote:InvokeServer("Store", ToolName)
+        task.wait(1)
+        BackpackRemote:InvokeServer("Grab", ToolName)
+    end)
+
+    return Success
+end
+
+local Running = false
+
+local function StartDupe()
+    if Running then
+        return
+    end
+
+    Running = true
+
+    task.spawn(function()
+        while Running do
+            local Tools = GetTools()
+
+            for _, Tool in ipairs(Tools) do
+                if not Running then
+                    break
+                end
+
+                DupeItem(Tool)
+                task.wait(0.5)
+            end
+
+            task.wait(1)
+        end
+    end)
+end
+
+local function StopDupe()
+    Running = false
+end
+
+StartDupe()
