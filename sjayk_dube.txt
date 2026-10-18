@@ -1,0 +1,195 @@
+local Players = game:GetService("Players")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local LocalPlayer = Players.LocalPlayer
+
+local Running = false
+local Infinite = false
+local DupeCount = 1
+local SelectedItem = ""
+
+local ScreenGui = Instance.new("ScreenGui")
+ScreenGui.Name = "DupeHub"
+ScreenGui.ResetOnSpawn = false
+ScreenGui.Parent = game:GetService("CoreGui")
+
+local Main = Instance.new("Frame")
+Main.Name = "Main"
+Main.Size = UDim2.new(0, 320, 0, 280)
+Main.Position = UDim2.new(0.5, -160, 0.5, -140)
+Main.BackgroundColor3 = Color3.fromRGB(18, 18, 18)
+Main.BorderSizePixel = 0
+Main.Parent = ScreenGui
+
+local MainCorner = Instance.new("UICorner")
+MainCorner.CornerRadius = UDim.new(0, 12)
+MainCorner.Parent = Main
+
+local Title = Instance.new("TextLabel")
+Title.Size = UDim2.new(1, -20, 0, 40)
+Title.Position = UDim2.new(0, 10, 0, 5)
+Title.BackgroundTransparency = 1
+Title.Text = "DUPE HUB"
+Title.TextColor3 = Color3.fromRGB(120, 180, 130)
+Title.TextSize = 22
+Title.Font = Enum.Font.GothamBold
+Title.Parent = Main
+
+local function CreateTextBox(placeholder, position, defaultText)
+    local Box = Instance.new("TextBox")
+    Box.Size = UDim2.new(1, -30, 0, 35)
+    Box.Position = position
+    Box.BackgroundColor3 = Color3.fromRGB(32, 32, 32)
+    Box.BorderSizePixel = 0
+    Box.PlaceholderText = placeholder
+    Box.Text = defaultText or ""
+    Box.TextColor3 = Color3.fromRGB(255, 255, 255)
+    Box.PlaceholderColor3 = Color3.fromRGB(150, 150, 150)
+    Box.TextSize = 14
+    Box.Font = Enum.Font.Gotham
+    Box.ClearTextOnFocus = false
+    Box.Parent = Main
+
+    local Corner = Instance.new("UICorner")
+    Corner.CornerRadius = UDim.new(0, 8)
+    Corner.Parent = Box
+
+    return Box
+end
+
+local ItemBox = CreateTextBox(
+    "Item Name (Blank = All Items)",
+    UDim2.new(0, 15, 0, 55)
+)
+
+local CountBox = CreateTextBox(
+    "Dupe Count",
+    UDim2.new(0, 15, 0, 100),
+    "1"
+)
+
+local function CreateButton(text, position, color)
+    local Button = Instance.new("TextButton")
+    Button.Size = UDim2.new(1, -30, 0, 35)
+    Button.Position = position
+    Button.BackgroundColor3 = color
+    Button.BorderSizePixel = 0
+    Button.Text = text
+    Button.TextColor3 = Color3.fromRGB(255, 255, 255)
+    Button.TextSize = 14
+    Button.Font = Enum.Font.GothamBold
+    Button.Parent = Main
+
+    local Corner = Instance.new("UICorner")
+    Corner.CornerRadius = UDim.new(0, 8)
+    Corner.Parent = Button
+
+    return Button
+end
+
+local StartButton = CreateButton(
+    "Start Dupe",
+    UDim2.new(0, 15, 0, 150),
+    Color3.fromRGB(55, 110, 70)
+)
+
+local InfiniteButton = CreateButton(
+    "Infinite Dupe: OFF",
+    UDim2.new(0, 15, 0, 195),
+    Color3.fromRGB(55, 75, 60)
+)
+
+local StopButton = CreateButton(
+    "Stop",
+    UDim2.new(0, 15, 0, 240),
+    Color3.fromRGB(120, 45, 45)
+)
+
+local ToggleButton = Instance.new("ImageButton")
+ToggleButton.Name = "ToggleButton"
+ToggleButton.Size = UDim2.new(0, 50, 0, 50)
+ToggleButton.Position = UDim2.new(0, 20, 0.5, -25)
+ToggleButton.BackgroundColor3 = Color3.fromRGB(22, 22, 22)
+ToggleButton.Image = "rbxassetid://75476471191967"
+ToggleButton.Parent = ScreenGui
+
+local ToggleCorner = Instance.new("UICorner")
+ToggleCorner.CornerRadius = UDim.new(1, 0)
+ToggleCorner.Parent = ToggleButton
+
+local Status = Instance.new("TextLabel")
+Status.Size = UDim2.new(1, -20, 0, 20)
+Status.Position = UDim2.new(0, 10, 1, -22)
+Status.BackgroundTransparency = 1
+Status.Text = "Status: Ready"
+Status.TextColor3 = Color3.fromRGB(150, 190, 150)
+Status.TextSize = 12
+Status.Font = Enum.Font.Gotham
+Status.Parent = Main
+
+ToggleButton.MouseButton1Click:Connect(function()
+    Main.Visible = not Main.Visible
+end)
+
+InfiniteButton.MouseButton1Click:Connect(function()
+    Infinite = not Infinite
+    InfiniteButton.Text = "Infinite Dupe: " .. (Infinite and "ON" or "OFF")
+end)
+
+StartButton.MouseButton1Click:Connect(function()
+    DupeCount = math.max(1, tonumber(CountBox.Text) or 1)
+    SelectedItem = ItemBox.Text
+    Running = true
+    Status.Text = "Status: Running"
+end)
+
+StopButton.MouseButton1Click:Connect(function()
+    Running = false
+    Status.Text = "Status: Stopped"
+end)
+
+local function GetTools()
+    local Tools = {}
+
+    local Backpack = LocalPlayer:FindFirstChild("Backpack")
+    if Backpack then
+        for _, Tool in ipairs(Backpack:GetChildren()) do
+            if Tool:IsA("Tool") then
+                table.insert(Tools, Tool)
+            end
+        end
+    end
+
+    if LocalPlayer.Character then
+        for _, Tool in ipairs(LocalPlayer.Character:GetChildren()) do
+            if Tool:IsA("Tool") then
+                table.insert(Tools, Tool)
+            end
+        end
+    end
+
+    return Tools
+end
+
+task.spawn(function()
+    while task.wait(0.2) do
+        if Running then
+            local Tools = GetTools()
+
+            for _, Tool in ipairs(Tools) do
+                if not Running then
+                    break
+                end
+
+                if SelectedItem == "" or Tool.Name:lower():find(SelectedItem:lower(), 1, true) then
+                    Status.Text = "Selected: " .. Tool.Name
+                    task.wait(0.1)
+                end
+            end
+
+            if not Infinite then
+                Running = false
+                Status.Text = "Status: Finished"
+            end
+        end
+    end
+end)
